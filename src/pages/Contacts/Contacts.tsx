@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { apiContacts } from "../../api/contacts/apiContacts";
 
 interface ContactsProps {}
 
@@ -14,10 +15,11 @@ const Contacts: React.FC<ContactsProps> = () => {
   const [contacts, setContacts] = useState<Contact[]>([]);
 
   useEffect(() => {
-    // Fetch contact data from API or local storage
-    fetch("https://jsonplaceholder.typicode.com/users")
-      .then((response) => response.json())
-      .then((data) => setContacts(data as Contact[]));
+    const fetchContacts = async () => {
+      const res = await apiContacts.getContacts();
+      setContacts(res as Contact[]);
+    };
+    fetchContacts();
   }, []);
 
   return (
@@ -29,7 +31,6 @@ const Contacts: React.FC<ContactsProps> = () => {
             <th>Name</th>
             <th>Email</th>
             <th>Phone</th>
-            {/* Add table headers for other fields */}
           </tr>
         </thead>
         <tbody>

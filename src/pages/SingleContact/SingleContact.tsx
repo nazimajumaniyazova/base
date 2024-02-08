@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Button } from "antd";
+import { apiContacts } from "../../api/contacts/apiContacts";
 
 interface Contact {
   id: string;
@@ -17,9 +18,13 @@ const SingleContact: React.FC<SingleContactProps> = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetch(`https://jsonplaceholder.typicode.com/users/${id}`)
-      .then((response) => response.json())
-      .then((data) => setContact(data as Contact));
+    const fetchContacts = async () => {
+      if (id) {
+        const res = await apiContacts.getContact(id);
+        setContact(res as Contact);
+      }
+    };
+    fetchContacts();
   }, [id]);
 
   if (!contact) {
